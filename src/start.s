@@ -19,15 +19,22 @@
 	.long MB_MAGIC
 	.long MB_FLAGS
 	.long MB_CHECKSUM
+
 .section .bss
 	.align 16
 	stack_bottom:
 		.skip 4096
 	stack_top:
+
 .section .text
 	start:
+		// Create the stack
 		mov $stack_top, %esp
+
+		// Go to kernel code
 		call kernel_main
+
+		// In case the kernel returns, hang
 		hang:
 			cli
 			hlt
