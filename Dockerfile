@@ -19,4 +19,4 @@ RUN apt-get install grub-pc-bin xorriso -y
 # Clone the repository
 RUN apt-get install git -y
 
-ENTRYPOINT [ "/bin/bash", "-c", "cd /root && git clone https://github.com/Zapparatus/OSDev" ]
+ENTRYPOINT [ "/bin/bash", "-c", "cd /root && git clone https://github.com/Zapparatus/OSDev && /bin/bash" ]
