@@ -5,8 +5,7 @@ FROM ubuntu:latest
 RUN apt-get update
 
 # Install the cross-chain compiler
-RUN mkdir /home/user && \
-    cd /home/user && \
+RUN cd /root && \
     apt-get install wget xz-utils -y && \
     wget http://newos.org/toolchains/i686-elf-4.9.1-Linux-x86_64.tar.xz && \
     tar xf i686-elf-4.9.1-Linux-x86_64.tar.xz
@@ -19,5 +18,5 @@ RUN apt-get install grub-pc-bin xorriso -y
 
 # Clone the repository
 RUN apt-get install git -y && \
-    cd /home/user && \
+    cd /root && \
     git clone https://github.com/Zapparatus/OSDev
