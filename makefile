@@ -1,23 +1,33 @@
-i686-elf	:= ../i686-elf-4.9.1-Linux-x86_64/bin
+# If the architecture is not x86_64
+CC = ../x86_64-elf-4.9.1-Linux-x86_64/bin/x86_64-elf-gcc
+LD = ../x86_64-elf-4.9.1-Linux-x86_64/bin/x86_64-elf-ld
+# else
+# CC = gcc
+# LD = ld
+
+CFLAGS = -std=gnu99 -ffreestanding
+LDFLAGS = -n -nostdlib
+QEMU = qemu-system-x86_64
+ASMFLAGS = -felf64
 
 all: bin/osdev.iso
 bin/osdev.iso: bin/kernel.elf isoroot/boot/grub/grub.cfg
 	cp bin/kernel.elf isoroot/boot/
 	grub-mkrescue isoroot -o bin/osdev.iso
 obj/%.o: src/%.s
-	$(i686-elf)/i686-elf-gcc -std=gnu99 -ffreestanding -g -c $< -o $@
+	nasm $(ASMFLAGS) $< -o $@
 obj/%.o: src/%.c
-	$(i686-elf)/i686-elf-gcc -std=gnu99 -ffreestanding -g -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 bin/kernel.elf: obj/kernel.o obj/start.o
-	$(i686-elf)/i686-elf-gcc -ffreestanding -nostdlib -g -T linker.ld obj/start.o obj/kernel.o -o bin/kernel.elf -lgcc
+	$(LD) $(LDFLAGS) -T linker.ld $^ -o $@
 
 dev: bin/kernel.elf
-	qemu-system-i386 -kernel bin/kernel.elf --curses
+	$(QEMU) -kernel bin/kernel.elf --curses
 
 run: bin/osdev.iso
-	qemu-system-i386 -drive file=bin/osdev.iso --curses
+	$(QEMU) -drive file=bin/osdev.iso --curses
 
 clean:
-	rm -rf obj/*
-	rm -rf bin/*
-	rm -r isoroot/boot/kernel.elf
+	rm -f obj/*.o
+	rm -f bin/kernel.elf bin/osdev.iso
+	rm -f isoroot/boot/kernel.elf

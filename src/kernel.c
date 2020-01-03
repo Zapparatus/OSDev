@@ -1,30 +1,12 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#if defined(__linux__)
-	#error "This code must be compiled with a cross-compiler"
-#elif !defined(__i386__)
-	#error "This code must be compiled with an x86-elf compiler"
-#endif
-
 volatile uint16_t* vga_buffer = (uint16_t*)0xB8000;
 const int VGA_COLS = 80;
 const int VGA_ROWS = 25;
 int term_col = 0;
 int term_row = 0;
 uint8_t term_color = 0x0F;
-
-void term_init()
-{
-	for (int col = 0; col < VGA_COLS; ++col)
-	{
-		for (int row = 0; row < VGA_ROWS; ++row)
-		{
-			const size_t index = (VGA_COLS * row) + col;
-			vga_buffer[index] = ((uint16_t)term_color << 8) | ' ';
-		}
-	}
-}
 
 void term_putc(char c)
 {
@@ -66,7 +48,6 @@ void term_print(const char* str)
 
 void kernel_main()
 {
-	term_init();
-	term_print("Welcome to 32-bit protected mode.");
-	term_print(" This kernel has been booted using GRUB2.\n");
+	term_print("Welcome to 64-bit long mode.");
+	term_print(" This kernel has been booted using multiboot2.\n");
 }
