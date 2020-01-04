@@ -50,19 +50,6 @@ void term_println(const char* str)
 	term_putc('\n');
 }
 
-char* reverse(char* str)
-{
-	int end = 0;
-	while (str[end++] != 0) {}
-	end -= 1;
-	for (int i = 0; i < end/2; ++i)
-	{
-		char temp = str[i];
-		str[i] = str[end - i - 1];
-		str[end - i - 1] = temp;
-	}
-	return str;
-}
 void term_printn(uint64_t n)
 {
 	if (n == 0)
