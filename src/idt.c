@@ -45,7 +45,7 @@ void init_idt()
   idt_flush((uint64_t)&idt_ptr);
 }
 
-void idt_set_gate(uint8_t num, uint64_t base, uint16_t sel, uint8_t flags)
+static void idt_set_gate(uint8_t num, uint64_t base, uint16_t sel, uint8_t flags)
 {
   idt_entries[num].offset_1 = base & 0xFFFF;
   idt_entries[num].offset_2 = (base >> 16) & 0xFFFF;
