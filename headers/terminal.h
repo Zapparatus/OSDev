@@ -1,8 +1,10 @@
 #include "common.h"
 #include "string.h"
+#include "stdarg.h"
 
-void term_putc(char c);
-void term_print(const char* str);
-void term_println(const char* str);
-void term_printn(uint64_t n);
-void term_printnln(uint64_t n);
+static void print_c(char c);
+static void print_number(uint64_t n);
+static void print_hex_number(uint64_t n);
+static void print_string(const char *str);
+
+void printf(const char *format, ...);
