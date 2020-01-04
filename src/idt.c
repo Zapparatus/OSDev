@@ -1,7 +1,5 @@
 #include "idt.h"
 
-void idt_flush(uint64_t pointer);
-
 void init_idt()
 {
   idt_ptr.limit = sizeof(idt_entry_t) * 256 - 1;

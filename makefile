@@ -17,8 +17,8 @@ bin/osdev.iso: bin/kernel.elf isoroot/boot/grub/grub.cfg
 obj/%.o: src/%.s
 	nasm $(ASMFLAGS) $< -o $@
 obj/%.o: src/%.c
-	$(CC) $(CFLAGS) -c $< -o $@
-bin/kernel.elf: obj/kernel.o obj/idt.o obj/start.o
+	$(CC) $(CFLAGS) -Iheaders -c $< -o $@
+bin/kernel.elf: obj/kernel.o obj/idt.o obj/terminal.o obj/start.o
 	$(LD) $(LDFLAGS) -T linker.ld $^ -o $@
 
 dev: bin/kernel.elf
