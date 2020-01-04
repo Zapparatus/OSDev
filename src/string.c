@@ -27,4 +27,6 @@ char *reverse(char *str)
 		str[i] = str[len - i - 1];
 		str[len - i - 1] = temp;
   }
+
+  return str;
 }
