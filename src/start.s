@@ -144,15 +144,15 @@ idt_flush:
 %macro ISR_NOERRCODE 1
 	global isr%1
 	isr%1:
-		push byte 0
-		push byte %1
+		push qword 0
+		push qword %1
 		jmp isr_common_stub
 %endmacro
 
 %macro ISR_ERRCODE 1
 	global isr%1
 	isr%1:
-		push byte %1
+		push qword %1
 		jmp isr_common_stub
 %endmacro
 
@@ -191,26 +191,16 @@ ISR_NOERRCODE 31
 
 extern isr_handler
 isr_common_stub:
-	push rax
-	mov ax, ds
-	push rax
-	
-	mov ax, 0x10
-	mov ds, ax
-	mov es, ax
-	mov fs, ax
-	mov gs, ax
-
+	pop rdi
 	call isr_handler
 
-	pop rax
-	mov ds, ax
-	mov es, ax
-	mov fs, ax
-	mov gs, ax
-
-	pop rax
-	add rsp, 8
+	cmp rdi, 8
+	jl .done
+	mov al, 0x20
+	out 0xA0, al
+.done:
+	mov al, 0x20
+	out 0x20, al
 	sti
 	iretq
 

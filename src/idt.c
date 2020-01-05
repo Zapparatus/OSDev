@@ -57,7 +57,10 @@ static void idt_set_gate(uint8_t num, uint64_t base, uint16_t sel, uint8_t flags
   idt_entries[num].type_attr = flags;
 }
 
-void isr_handler()
+void isr_handler(uint64_t n)
 {
-  *((uint16_t*)0xB8000) = 0x0F00 | 'a';
+  if (n != 8)
+  {
+    printf("Interrupt %d called.\n", n);
+  }
 }
