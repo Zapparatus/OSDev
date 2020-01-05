@@ -18,7 +18,7 @@ obj/%.o: src/%.s
 	nasm $(ASMFLAGS) $< -o $@
 obj/%.o: src/%.c
 	$(CC) $(CFLAGS) -Iheaders -c $< -o $@
-bin/kernel.elf: obj/kernel.o obj/idt.o obj/terminal.o obj/string.o obj/start.o
+bin/kernel.elf: obj/kernel.o obj/idt.o obj/terminal.o obj/string.o obj/io.o obj/start.o
 	$(LD) $(LDFLAGS) -T linker.ld $^ -o $@
 
 dev: bin/kernel.elf
