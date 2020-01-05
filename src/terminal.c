@@ -45,8 +45,9 @@ static void print_string(const char *str)
 	}
 }
 
-static void print_number(uint64_t n)
+static void print_number(uint64_t number)
 {
+	uint64_t n = number;
 	if (n == 0)
 	{
 		print_c('0');
@@ -67,8 +68,9 @@ static void print_number(uint64_t n)
 	print_string(reverse(num));
 }
 
-static void print_hex_number(uint64_t n)
+static void print_hex_number(uint64_t number)
 {
+	uint64_t n = number;
 	if (n == 0)
 	{
 		print_c('0');
