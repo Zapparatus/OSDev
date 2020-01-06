@@ -1,3 +1,5 @@
 bin/*
+!bin/README.md
 obj/*
+!obj/README.md
 isoroot/boot/kernel.elf
