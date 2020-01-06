@@ -1,22 +1,18 @@
 # Start from ubuntu
 FROM ubuntu:latest
 
-# Update package lists
-RUN apt-get update
+# Update package lists and install required tools
+RUN apt-get update && \
+  apt-get install wget xz-utils make qemu nasm grub-pc-bin xorriso git -y
 
-# Install the cross-chain compiler
-RUN cd /root && \
-    apt-get install wget xz-utils -y && \
-    wget http://newos.org/toolchains/i686-elf-4.9.1-Linux-x86_64.tar.xz && \
-    tar xf i686-elf-4.9.1-Linux-x86_64.tar.xz
+# Install the cross-compiler
+RUN wget http://newos.org/toolchains/x86_64-elf-4.9.1-Linux-x86_64.tar.xz && \
+  tar xf x86_64-elf-4.9.1-Linux-x86_64.tar.xz
 
-# Install the utilities to make and run
-RUN apt-get install make qemu -y
+# Create the working directory and copy the files over
+RUN mkdir /osdev
+COPY . /osdev
+WORKDIR /osdev
 
-# Install the utilities to create a cd
-RUN apt-get install grub-pc-bin xorriso -y
-
-# Clone the repository
-RUN apt-get install git -y
-
-ENTRYPOINT [ "/bin/bash", "-c", "cd /root && git clone https://github.com/Zapparatus/OSDev && /bin/bash" ]
+# Run qemu
+CMD [ "make", "run" ]
