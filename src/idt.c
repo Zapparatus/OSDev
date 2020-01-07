@@ -91,14 +91,20 @@ static void idt_set_gate(uint8_t num, uint64_t base, uint16_t sel, uint8_t flags
 
 void isr_handler(uint64_t n, uint64_t error)
 {
-  // System timer
-  if (n != 0x20)
+  switch (n)
   {
-    if (n == 0)
-    {
+    case 0:
       panic("Divided by zero!\n");
-      return;
-    }
-    printf("Interrupt %x called.\n", n);
+      break;
+    // System timer
+    case 0x20:
+      break;
+    // Keyboard
+    case 0x21:
+      printf("Got scan code %x\n", inb(0x60));
+      break;
+    default:
+      printf("Interrupt %x called.\n", n);
+      break;
   }
 }
