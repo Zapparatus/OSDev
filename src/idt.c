@@ -9,6 +9,29 @@ void init_idt()
     ((uint8_t*)idt_entries)[i] = 0;
   }
 
+  #define PIC1 0x20
+  #define PIC2 0xA0
+  #define ICW1 0x11
+  #define ICW4 0x01
+
+  // Begin initialization
+  outb(PIC1, 0x11);
+  outb(PIC2, 0x11);
+
+  // Remap irqs to master -> 0x20-0x27
+  //  and slave -> 0x28-0x2F
+  outb(PIC1 + 1, 0x20);
+  outb(PIC2 + 1, 0x28);
+
+  outb(PIC1 + 1, 4);
+  outb(PIC2 + 1, 2);
+
+  outb(PIC1 + 1, 0x01);
+  outb(PIC2 + 1, 0x01);
+
+  outb(PIC1 + 1, 0);
+  outb(PIC2 + 1, 0);
+
   idt_set_gate(0, (uint64_t)isr0, 0x08, 0x8E);
   idt_set_gate(1, (uint64_t)isr1, 0x08, 0x8E);
   idt_set_gate(2, (uint64_t)isr2, 0x08, 0x8E);
@@ -41,6 +64,15 @@ void init_idt()
   idt_set_gate(29, (uint64_t)isr29, 0x08, 0x8E);
   idt_set_gate(30, (uint64_t)isr30, 0x08, 0x8E);
   idt_set_gate(31, (uint64_t)isr31, 0x08, 0x8E);
+  idt_set_gate(32, (uint64_t)isr32, 0x08, 0x8E);
+  idt_set_gate(33, (uint64_t)isr33, 0x08, 0x8E);
+  idt_set_gate(34, (uint64_t)isr34, 0x08, 0x8E);
+  idt_set_gate(35, (uint64_t)isr35, 0x08, 0x8E);
+  idt_set_gate(36, (uint64_t)isr36, 0x08, 0x8E);
+  idt_set_gate(37, (uint64_t)isr37, 0x08, 0x8E);
+  idt_set_gate(38, (uint64_t)isr38, 0x08, 0x8E);
+  idt_set_gate(39, (uint64_t)isr39, 0x08, 0x8E);
+  idt_set_gate(40, (uint64_t)isr40, 0x08, 0x8E);
 
   idt_flush((uint64_t)&idt_ptr);
 }
@@ -57,10 +89,16 @@ static void idt_set_gate(uint8_t num, uint64_t base, uint16_t sel, uint8_t flags
   idt_entries[num].type_attr = flags;
 }
 
-void isr_handler(uint64_t n)
+void isr_handler(uint64_t n, uint64_t error)
 {
-  if (n != 8)
+  // System timer
+  if (n != 0x20)
   {
-    printf("Interrupt %d called.\n", n);
+    if (n == 0)
+    {
+      panic("Divided by zero!\n");
+      return;
+    }
+    printf("Interrupt %x called.\n", n);
   }
 }

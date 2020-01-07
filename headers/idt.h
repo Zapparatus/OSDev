@@ -1,4 +1,5 @@
 #include "common.h"
+#include "io.h"
 #include "terminal.h"
 
 // A struct describing an interrupt gate.
@@ -55,6 +56,15 @@ extern void isr28();
 extern void isr29();
 extern void isr30();
 extern void isr31();
+extern void isr32();
+extern void isr33();
+extern void isr34();
+extern void isr35();
+extern void isr36();
+extern void isr37();
+extern void isr38();
+extern void isr39();
+extern void isr40();
 
 idt_entry_t idt_entries[256];
 idt_ptr_t idt_ptr;
@@ -62,4 +72,4 @@ idt_ptr_t idt_ptr;
 void idt_flush(uint64_t pointer);
 void init_idt();
 static void idt_set_gate(uint8_t num, uint64_t base, uint16_t sel, uint8_t flags);
-void isr_handler(uint64_t n);
+void isr_handler(uint64_t n, uint64_t error);

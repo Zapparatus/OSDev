@@ -188,19 +188,38 @@ ISR_NOERRCODE 28
 ISR_NOERRCODE 29
 ISR_NOERRCODE 30
 ISR_NOERRCODE 31
+ISR_NOERRCODE 32
+ISR_NOERRCODE 33
+ISR_NOERRCODE 34
+ISR_NOERRCODE 35
+ISR_NOERRCODE 36
+ISR_NOERRCODE 37
+ISR_NOERRCODE 38
+ISR_NOERRCODE 39
+ISR_NOERRCODE 40
 
 extern isr_handler
+extern printf
 isr_common_stub:
+	; Get interrupt number
 	pop rdi
+	; Get error code (if applicable)
+	pop rsi
+	push rdi
 	call isr_handler
+	pop rdi
 
-	cmp rdi, 8
+	; Skip if handling an exception
+	cmp rdi, 0x20
 	jl .done
+
+	cmp rdi, 0x28
+	jl .irq
 	mov al, 0x20
 	out 0xA0, al
-.done:
+.irq:
 	mov al, 0x20
 	out 0x20, al
+.done:
 	sti
 	iretq
-
