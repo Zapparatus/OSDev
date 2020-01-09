@@ -10,6 +10,16 @@ void *memset(void *str, int c, size_t n)
   return str;
 }
 
+void *memcpy(void *str1, const void *str2, size_t n)
+{
+  for (size_t i = 0; i < n; ++i)
+  {
+    ((char *)str1)[i] = ((char *)str2)[i];
+  }
+
+  return str1;
+}
+
 size_t strlen(const char *str)
 {
   size_t i = 0;

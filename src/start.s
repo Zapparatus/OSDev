@@ -119,21 +119,13 @@ Realm64:
 	mov fs, ax
 	mov gs, ax
 	mov ss, ax
-	
-	call clear
+
 	call kernel_main
 
 	hang:
 		cli
 		hlt
 		jmp hang
-
-clear:
-	mov edi, 0xB8000
-	mov rax, 0x1F201F201F201F20
-	mov ecx, 500
-	rep stosq
-	ret
 
 global idt_flush
 idt_flush:

@@ -2,9 +2,12 @@
 
 void kernel_main()
 {
+	clear_screen();
+	set_cursor(0, 0);
+	printf("Kernel starting...\n");
+	printf("Loading interrupts...\n");
 	init_idt();
-	printf("Welcome to 64-bit long mode.\n");
-	printf("This kernel has been booted using multiboot2.\n");
-	printf("The kernel encountered no issues.\n");
+	printf("Interrupts loaded.\n");
+	printf("Looping...\n");
 	while (1) {}
 }

@@ -1,5 +1,7 @@
 #include "idt.h"
 
+int is_extended = 0;
+
 void init_idt()
 {
   idt_ptr.limit = sizeof(idt_entry_t) * 256 - 1;
@@ -91,6 +93,7 @@ static void idt_set_gate(uint8_t num, uint64_t base, uint16_t sel, uint8_t flags
 
 void isr_handler(uint64_t n, uint64_t error)
 {
+  int code = 0;
   switch (n)
   {
     case 0:
@@ -101,7 +104,18 @@ void isr_handler(uint64_t n, uint64_t error)
       break;
     // Keyboard
     case 0x21:
-      printf("Got scan code %x\n", inb(0x60));
+      code = inb(0x60);
+      if (code == 0xE0)
+      {
+        is_extended = 1;
+        return;
+      }
+      if (is_extended)
+      {
+        code = code << 8;
+      }
+      is_extended = 0;
+      printf("Got code %x\n", code);
       break;
     default:
       printf("Interrupt %x called.\n", n);

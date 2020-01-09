@@ -1,8 +1,6 @@
 #include "terminal.h"
 
 volatile uint16_t* vga_buffer = (uint16_t*)0xB8000;
-const int VGA_COLS = 80;
-const int VGA_ROWS = 25;
 int term_col = 0;
 int term_row = 0;
 uint8_t term_color = 0x0F;
@@ -32,8 +30,9 @@ static void print_c(char c)
 	}
 	if (term_row >= VGA_ROWS)
 	{
-		term_col = 0;
-		term_row = 0;
+		term_row = VGA_ROWS - 1;
+		memcpy((void *)vga_buffer, (void *)(vga_buffer + VGA_COLS), 2*VGA_COLS*(VGA_ROWS - 1));
+		memset((void *)(vga_buffer + VGA_COLS*(VGA_ROWS - 1)), 0, 2*VGA_COLS);
 	}
 }
 
@@ -99,6 +98,20 @@ static void print_hex_number(uint64_t number)
 	}
 	print_string("0x");
 	print_string(reverse(num));
+}
+
+void clear_screen()
+{
+	for (int i = 0; i < 2*VGA_ROWS; ++i)
+	{
+		printf("\n");
+	}
+}
+
+void set_cursor(int x, int y)
+{
+	term_col = y;
+	term_row = x;
 }
 
 void printf(const char *format, ...)
