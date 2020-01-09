@@ -1,14 +1,24 @@
 # If the architecture is not x86_64 on linux
 CC = ../x86_64-elf-4.9.1-Linux-x86_64/bin/x86_64-elf-gcc
 LD = ../x86_64-elf-4.9.1-Linux-x86_64/bin/x86_64-elf-ld
+QEMU = qemu-system-x86_64
 # else
 # CC = gcc
 # LD = ld
 
-CFLAGS = -std=gnu99 -ffreestanding
-LDFLAGS = -n -nostdlib
-QEMU = qemu-system-x86_64
+CFLAGS = -std=gnu99 -ffreestanding -Wall
 ASMFLAGS = -felf64
+LDFLAGS = -n -nostdlib
+QEMUFLAGS = -drive file=bin/osdev.iso
+
+OBJECTS = obj/kernel.o \
+	obj/start.o \
+	obj/idt.o \
+	obj/io.o \
+	obj/memory.o \
+	obj/panic.o \
+	obj/string.o \
+	obj/terminal.o
 
 all: bin/osdev.iso
 bin/osdev.iso: bin/kernel.elf isoroot/boot/grub/grub.cfg
@@ -18,14 +28,14 @@ obj/%.o: src/%.s
 	@nasm $(ASMFLAGS) $< -o $@
 obj/%.o: src/%.c
 	@$(CC) $(CFLAGS) -Iheaders -c $< -o $@
-bin/kernel.elf: obj/kernel.o obj/idt.o obj/terminal.o obj/string.o obj/io.o obj/panic.o obj/start.o
+bin/kernel.elf: $(OBJECTS)
 	@$(LD) $(LDFLAGS) -T linker.ld $^ -o $@
 
 dev: bin/osdev.iso
-	@$(QEMU) -drive file=bin/osdev.iso --curses
+	@$(QEMU) $(QEMUFLAGS) --curses
 
 run: bin/osdev.iso
-	@$(QEMU) -drive file=bin/osdev.iso
+	@$(QEMU) $(QEMUFLAGS)
 
 clean:
 	@rm -f obj/*.o

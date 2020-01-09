@@ -34,21 +34,21 @@ section .text
 		mov esp, stack_top
 
 		; Clear space for paging tables
-		mov edi, 0x1000
+		mov edi, 0x5000
 		mov cr3, edi
 		xor eax, eax
-		mov ecx, 4096
+		mov ecx, 0x1000
 		rep stosd
 		mov edi, cr3
 
 		; Setup the PML4T
-		mov dword [edi], 0x2003
+		mov dword [edi], 0x6003
 		add edi, 0x1000
 		; Setup the PDPT
-		mov dword [edi], 0x3003
+		mov dword [edi], 0x7003
 		add edi, 0x1000
 		; Setup the PDT
-		mov dword [edi], 0x4003
+		mov dword [edi], 0x8003
 		add edi, 0x1000
 
 		mov ebx, 0x00000003

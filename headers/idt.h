@@ -71,5 +71,4 @@ idt_ptr_t idt_ptr;
 
 void idt_flush(uint64_t pointer);
 void init_idt();
-static void idt_set_gate(uint8_t num, uint64_t base, uint16_t sel, uint8_t flags);
 void isr_handler(uint64_t n, uint64_t error);

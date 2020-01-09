@@ -2,6 +2,8 @@
 
 int is_extended = 0;
 
+static void idt_set_gate(uint8_t num, uint64_t base, uint16_t sel, uint8_t flags);
+
 void init_idt()
 {
   idt_ptr.limit = sizeof(idt_entry_t) * 256 - 1;
