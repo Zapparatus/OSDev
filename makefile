@@ -21,11 +21,11 @@ obj/%.o: src/%.c
 bin/kernel.elf: obj/kernel.o obj/idt.o obj/terminal.o obj/string.o obj/io.o obj/panic.o obj/start.o
 	@$(LD) $(LDFLAGS) -T linker.ld $^ -o $@
 
-dev: bin/kernel.elf
-	@$(QEMU) -kernel bin/kernel.elf --curses
+dev: bin/osdev.iso
+	@$(QEMU) -drive file=bin/osdev.iso --curses
 
 run: bin/osdev.iso
-	@$(QEMU) -drive file=bin/osdev.iso --curses
+	@$(QEMU) -drive file=bin/osdev.iso
 
 clean:
 	@rm -f obj/*.o
