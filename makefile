@@ -4,6 +4,7 @@
 # else
 CC = gcc
 LD = ld
+BOCHSDBG = bochsdbg
 QEMU = qemu-system-x86_64
 
 CFLAGS = -std=gnu99 -ffreestanding -Wall
@@ -32,7 +33,7 @@ bin/kernel.elf: $(OBJECTS)
 	@$(LD) $(LDFLAGS) -T linker.ld $^ -o $@
 
 dev: bin/osdev.iso
-	@$(QEMU) $(QEMUFLAGS) --curses
+	@$(BOCHSDBG) -q -f bochsrc.txt
 
 run: bin/osdev.iso
 	@$(QEMU) $(QEMUFLAGS)
