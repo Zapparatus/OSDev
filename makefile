@@ -1,10 +1,10 @@
 # If the architecture is not x86_64 on linux
-CC = ../x86_64-elf-4.9.1-Linux-x86_64/bin/x86_64-elf-gcc
-LD = ../x86_64-elf-4.9.1-Linux-x86_64/bin/x86_64-elf-ld
-QEMU = qemu-system-x86_64
+# CC = ../x86_64-elf-4.9.1-Linux-x86_64/bin/x86_64-elf-gcc
+# LD = ../x86_64-elf-4.9.1-Linux-x86_64/bin/x86_64-elf-ld
 # else
-# CC = gcc
-# LD = ld
+CC = gcc
+LD = ld
+QEMU = qemu-system-x86_64
 
 CFLAGS = -std=gnu99 -ffreestanding -Wall
 ASMFLAGS = -felf64

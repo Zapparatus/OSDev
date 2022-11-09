@@ -66,9 +66,6 @@ extern void isr38();
 extern void isr39();
 extern void isr40();
 
-idt_entry_t idt_entries[256];
-idt_ptr_t idt_ptr;
-
 void idt_flush(uint64_t pointer);
 void init_idt();
 void isr_handler(uint64_t n, uint64_t error);

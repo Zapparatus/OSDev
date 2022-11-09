@@ -1,6 +1,8 @@
 #include "idt.h"
 
 int is_extended = 0;
+idt_entry_t idt_entries[256];
+idt_ptr_t idt_ptr;
 
 static void idt_set_gate(uint8_t num, uint64_t base, uint16_t sel, uint8_t flags);
 
